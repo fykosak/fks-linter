@@ -21,6 +21,12 @@
 # checkers #
   - line length
   - eq is indented
+
   - whitespace at end of line
   - sentence begins on new line?
   - eq is part of sentence
+  - missing ~
+  - correctly formated labels of objects
+
+# TODO
+  - switch on/off individual checkers on CLI
