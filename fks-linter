@@ -1,0 +1,101 @@
+#!/usr/bin/python3
+
+import sys
+import re
+
+class Context:
+    def __init__(self):
+        self.lineno = 0
+        self.charno = 0
+        self.colno  = 0
+
+class Event:
+    LineEnd = 0
+
+    def __init__(self, e, context):
+        self.name = e
+        self.context = context
+
+class LineLength:
+    def __init__(self, linter, parser, max_len):
+        parser.register(Event.LineEnd, self.handler)
+        self.linter = linter
+        self.max_len = max_len
+
+    def handler(self, event):
+        if event.context.colno > self.max_len:
+            self.linter.l("Line {} exceeds {} characters limit.".format( \
+              event.context.lineno, self.max_len))
+
+class Linter:
+# TODO could print context neighborhood
+    def l(self, message):
+        print(message)
+
+class Parser:
+    seq = re.compile('[a-zA-Z0-9]')
+
+    STATE_INIT = 1
+    STATE_SEQ  = 2
+        
+    def __init__(self):
+        self.handlers = {}
+            
+    def register(self, e, handler):
+        if not e in self.handlers:
+            self.handlers[e] = []
+        self.handlers[e].append(handler)
+
+
+    def parse(self, stream):
+        self.braces = 0
+        self.context = Context()
+        self.state = self.STATE_INIT
+
+        for line in stream:
+            self.context.lineno += 1
+            self.context.colno = 0
+
+            for c in line:
+                self.context.colno += 1
+                self.context.charno += 1
+            self._raise(Event.LineEnd)
+
+    def _raise(self, e):
+        if not e in self.handlers:
+            return
+
+        event = Event(e, self.context)
+        for h in self.handlers[e]:
+            h(event)
+
+    def _st_init(self, line, c):
+        if c == '\\':
+            return self.STATE_SEQ
+        elif c == '{':
+            self.braces += 1
+        elif c == '}':
+            self.braces -= 1
+
+    def _st_seq(self, line, c):
+        if seq.match(c):
+            return self.STATE_SEQ
+        else:
+            # TODO raise macro
+            return self.STATE_INIT
+        pas 
+
+
+def lint(stream):
+    for line in stream:
+        print("L: {}".format(line))
+
+
+if __name__ == '__main__':
+    p = Parser()
+    l = Linter()
+
+    LineLength(l, p, 80)
+
+    p.parse(sys.stdin)
+
