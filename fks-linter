@@ -9,6 +9,7 @@ class Context:
         self.charno = 0
         self.colno  = 0
         self.colidx = 0
+        self.line   = None
 
 class Event:
     LineEnd    = 'le'
@@ -32,8 +33,9 @@ class LineLength:
 
     def handler(self, event):
         if event.context.colno > self.max_len:
-            self.linter.l("Line {} exceeds {} characters limit.".format( \
-              event.context.lineno, self.max_len))
+            self.linter.l(event.context, \
+              "Line exceeds {} characters limit.".format( \
+              self.max_len))
 
 class EqIndentation:
     def __init__(self, linter, parser, indent):
@@ -73,8 +75,7 @@ class EqIndentation:
             return
 
         if not event.args[0].startswith(self.indent):
-            self.linter.l("Wrong equation indentation on line {}".format( \
-              event.context.lineno))
+            self.linter.l(event.context, "Wrong equation indentation.")
         
 # XXX Such checker would be much easier written as regular expression
 #     (However, this takes comment into account too.)
@@ -90,14 +91,13 @@ class TrailingWhitespace:
             return
 
         if text[-1].isspace():
-            self.linter.l("Trailing whitespace on line {}".format( \
-              event.context.lineno))
+            self.linter.l(event.context, "Trailing whitespace.")
         
 
 class Linter:
-# TODO could print context neighborhood
-    def l(self, message):
-        print(message)
+    # l for line (there should be also c function)
+    def l(self, context, message):
+        print("Line {}:\t{}".format(context.lineno, message))
 
 class Parser:
     seq = re.compile('[a-zA-Z0-9_]')
@@ -127,11 +127,14 @@ class Parser:
         self.context = Context()
 
         for line in stream:
+            line = line[:-1] # TODO CRLF
+
             self.state = self.STATE_TEXT
             self.context.lineno += 1
             self.context.colno = 0
+            self.context.line = line
+
             begin = True
-            line = line[:-1] # TODO CRLF
 
             for c in line:
                 self.context.colidx = self.context.colno

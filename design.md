@@ -31,5 +31,6 @@
 
 # TODO
   - switch on/off individual checkers on CLI
-  - various severity levels
+  - various severity levels of linting errors
   - colorized output
+  - (optionally) print context of linting errors
