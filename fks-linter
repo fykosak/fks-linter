@@ -15,7 +15,8 @@ class Event:
     Macro      = 'm'  # (macro)
     GroupBegin = 'gb' # (depth)
     GroupEnd   = 'ge' # (depth)
-    TextBegin  = 'tb' # (text string)
+    TextBegin  = 'tb' # (text begin string)
+    TextEnd    = 'te' # (text end string)
 
     def __init__(self, e, context, *args):
         self.name = e
@@ -75,6 +76,23 @@ class EqIndentation:
             self.linter.l("Wrong equation indentation on line {}".format( \
               event.context.lineno))
         
+# XXX Such checker would be much easier written as regular expression
+#     (However, this takes comment into account too.)
+class TrailingWhitespace:
+    def __init__(self, linter, parser):
+        self.linter = linter
+
+        parser.register(Event.TextEnd, self.text_end)
+
+    def text_end(self, event):
+        text = event.args[0]
+        if len(text) == 0:
+            return
+
+        if text[-1].isspace():
+            self.linter.l("Trailing whitespace on line {}".format( \
+              event.context.lineno))
+        
 
 class Linter:
 # TODO could print context neighborhood
@@ -107,24 +125,32 @@ class Parser:
         self.depth = 0
         self.macro = None
         self.context = Context()
-        self.state = self.STATE_TEXT
 
         for line in stream:
+            self.state = self.STATE_TEXT
             self.context.lineno += 1
             self.context.colno = 0
             begin = True
+            line = line[:-1] # TODO CRLF
 
             for c in line:
                 self.context.colidx = self.context.colno
                 self.context.colno += 1
                 self.context.charno += 1
 
+                ps = self.state
                 s = self.fsm[self.state](line,c)
                 self.state = s if s else self.state
 
                 if begin and self.state != self.STATE_COMMENT:
                     self._raise(Event.TextBegin, line[self.context.colidx:])
+                elif self.state != ps and self.state == self.STATE_COMMENT:
+                    self._raise(Event.TextEnd, line[:self.context.colidx])
+
                 begin = False
+
+            if self.state != self.STATE_COMMENT:
+                self._raise(Event.TextEnd, line[:self.context.colidx + 1])
 
             self._raise(Event.LineEnd)
 
@@ -160,16 +186,17 @@ class Parser:
             return self._st_text(line, c)
 
     def _st_comment(self, line, c):
-        if c == '\r' or c == '\n': # TODO this could be better for CRLF
-            return self.STATE_TEXT
+        # comment is turned of in main loop
+        pass
 
 
 if __name__ == '__main__':
     p = Parser()
     l = Linter()
 
-    #LineLength(l, p, 80)
+    LineLength(l, p, 80)
     EqIndentation(l, p, '    ')
+    TrailingWhitespace(l, p)
 
     p.parse(sys.stdin)
 

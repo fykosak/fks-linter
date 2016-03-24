@@ -21,12 +21,15 @@
 # checkers #
   - line length
   - eq is indented
-
   - whitespace at end of line
+  
   - sentence begins on new line?
   - eq is part of sentence
   - missing ~
   - correctly formated labels of objects
+  - check that solution doesn't end in equation
 
 # TODO
   - switch on/off individual checkers on CLI
+  - various severity levels
+  - colorized output
