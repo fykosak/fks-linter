@@ -33,7 +33,26 @@
     - eq is part of sentence
     - missing ~
     - correctly formated labels of objects
+    - dot at the end od caption
+    - \lbl in equations
+    - all \lbl (equations) are referenced
+    - equations are referenced by \eqref, other by \ref
+    - all references are cross file only
     - check that solution doesn't end in equation
+    - \eq[m] withnout & on each (TeX) row
+    - check "macro (no comma, one space or no unit; except \micro)
+    - no $$, \left(, \right), equation, eqnarray, align
+    - space every 3 digits
+    - space \, after equation
+    - no white space at the solution, task, footnote ... beginning
+    - probname, probsolauthor,... on one line
+    - % at the end of task, solution
+    - no space before footnote macro
+    - no braces for one-letter index
+    - closing brace of task, solution,... on serate line
+    - {} after \dots
+    - no tabulator
+    - no indentation of the text
   - switch on/off individual checkers on CLI
   - various severity levels of linting errors
   - colorized output
