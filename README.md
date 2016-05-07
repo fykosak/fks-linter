@@ -41,6 +41,7 @@
     - check that solution doesn't end in equation
     - \eq[m] withnout & on each (TeX) row
     - check "macro (no comma, one space or no unit; except \micro)
+      - comma is supported for backward compatibility only
     - no $$, \left(, \right), equation, eqnarray, align
     - space every 3 digits
     - space \, after equation
