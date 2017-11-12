@@ -31,7 +31,6 @@
   - checkers
     - sentence begins on new line?
     - eq is part of sentence
-    - missing ~
     - correctly formatted labels of objects
     - dot at the end od caption
     - \lbl in equations
