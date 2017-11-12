@@ -25,6 +25,8 @@
   - line length
   - eq is indented
   - whitespace at end of line
+  - no \left(, \right)
+  - {} after \dots
   
 # TODO
 
