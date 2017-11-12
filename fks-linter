@@ -3,6 +3,7 @@
 import sys
 from fks.linter import Parser, Linter
 from fks.linter.checkers import *
+from re import compile as rc
 
 
 if __name__ == '__main__':
@@ -12,6 +13,12 @@ if __name__ == '__main__':
     LineLength(l, p, 80)
     EqIndentation(l, p, '    ')
     TrailingWhitespace(l, p)
+    ForbiddenMacros(l, p, \
+      [ \
+        ((rc('left'), rc('\('), None), "\\("), \
+        ((rc('right'), rc('\)'), None), "\\)"), \
+        ((rc('dots'), rc('[^{]'), None), "\dots{}") \
+      ])
 
     p.parse(sys.stdin)
 
