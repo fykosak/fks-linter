@@ -21,13 +21,15 @@ class Event:
         self.context = context
         self.args = args
 
-    def to_string(self):
+    def to_string(self, args):
         if self.name != Event.Macro:
             return
-        ret = "\\" + self.args[0]
-        if self.args[2]:
+        ret = "\\"
+        if args[0]:
+            ret += self.args[0]
+        if self.args[2] and args[2]:
             ret += "[" + self.args[2] + "]"
-        if self.args[1]:
+        if self.args[1] and args[1]:
             if self.args[1][0].isalpha():
                 ret += " "
             ret += self.args[1]

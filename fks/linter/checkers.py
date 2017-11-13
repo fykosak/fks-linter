@@ -91,6 +91,6 @@ class ForbiddenMacros:
             if self.match(macro[0], event.args):
                 self.linter.l(event.context, \
                   "Forbidden macro {}, use {} instead.".format( \
-                  event.to_string(), macro[1]))
+                  event.to_string(macro[0]), macro[1]))
 
 
