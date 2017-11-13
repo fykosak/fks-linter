@@ -79,10 +79,7 @@ class ForbiddenMacros:
 
     def match(self, pattern, text):
         for p in range(3):
-            if pattern[p] == None:
-                if text[p]:
-                    return False
-            elif pattern[p].match(text[p]) == None:
+            if pattern[p] and pattern[p].fullmatch(text[p]) == None:
                 return False
         return True
 
