@@ -10,16 +10,18 @@ class Context:
 
 class Event:
     LineEnd    = 'le'
-    Macro      = 'm'  # (macro)
-    GroupBegin = 'gb' # (depth)
-    GroupEnd   = 'ge' # (depth)
-    TextBegin  = 'tb' # (text begin string)
-    TextEnd    = 'te' # (text end string)
+    Macro      = 'm'   # (macro)
+    GroupBegin = 'gb'  # (depth)
+    GroupEnd   = 'ge'  # (depth)
+    TextBegin  = 'tb'  # (text begin string)
+    TextEnd    = 'te'  # (text end string)
+    Character  = 'chr'
 
     def __init__(self, e, context, *args):
         self.name = e
         self.context = context
         self.args = args
+        print(e, args)
 
     def to_string(self):
         if self.name != Event.Macro:
@@ -90,6 +92,7 @@ class Parser:
                     self._raise(Event.TextEnd, line[:self.context.colidx])
 
                 begin = False
+                self._raise(Event.Character, c)
 
             if self.state != self.STATE_COMMENT:
                 self._raise(Event.TextEnd, line[:self.context.colidx + 1])
@@ -99,7 +102,7 @@ class Parser:
     def _raise(self, e, *args):
         #print("Raise: {}".format(e), args)
         if not e in self.handlers:
-            return
+            self.handlers[e] = []
 
         event = Event(e, self.context, *args)
         for h in self.handlers[e]:
