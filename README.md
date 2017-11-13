@@ -25,24 +25,25 @@
   - line length
   - eq is indented
   - whitespace at end of line
+  - no \left(, \right)
+  - {} after \dots
   
 # TODO
 
   - checkers
     - sentence begins on new line?
     - eq is part of sentence
-    - missing ~
-    - correctly formated labels of objects
+    - correctly formatted labels of objects
     - dot at the end od caption
     - \lbl in equations
     - all \lbl (equations) are referenced
     - equations are referenced by \eqref, other by \ref
     - all references are cross file only
     - check that solution doesn't end in equation
-    - \eq[m] withnout & on each (TeX) row
+    - \eq[m] without & on each (TeX) row
     - check "macro (no comma, one space or no unit; except \micro)
       - comma is supported for backward compatibility only
-    - no $$, \left(, \right), equation, eqnarray, align
+    - no $$, equation, eqnarray, align
     - space every 3 digits
     - space \, after equation
     - no white space at the solution, task, footnote ... beginning
@@ -50,8 +51,7 @@
     - % at the end of task, solution
     - no space before footnote macro
     - no braces for one-letter index
-    - closing brace of task, solution,... on serate line
-    - {} after \dots
+    - closing brace of task, solution,... on separate line
     - no tabulator
     - no indentation of the text
   - switch on/off individual checkers on CLI
