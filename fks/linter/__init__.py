@@ -21,7 +21,7 @@ class Event:
         self.name = e
         self.context = context
         self.args = args
-        print(e, args)
+#        print(e, args)
 
     def to_string(self, args):
         if self.name != Event.Macro:
