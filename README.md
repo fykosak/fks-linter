@@ -2,7 +2,7 @@
 
     git clone https://github.com/fykosak/fks-linter.git
     cd fks-linter
-    ./fks-linter <file-to-check
+    ./fks-linter file-to-check
 
 # Design
 

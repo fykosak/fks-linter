@@ -13,5 +13,6 @@ if __name__ == '__main__':
     EqIndentation(l, p, '    ')
     TrailingWhitespace(l, p)
 
-    p.parse(sys.stdin)
+    inf = open(sys.argv[1])
+    p.parse(inf)
 

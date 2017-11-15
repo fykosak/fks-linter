@@ -54,7 +54,7 @@ class Parser:
         self.context = Context()
 
         for line in stream:
-            line = line[:-1] # TODO CRLF
+            line = line[:-1]
 
             self.state = self.STATE_TEXT
             self.context.lineno += 1
