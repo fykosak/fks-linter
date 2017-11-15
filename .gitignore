@@ -1,0 +1,6 @@
+*.log
+
+/fks/linter/__pycache__/
+/test/*.pdf
+/test/*.aux
+/test/*.out
