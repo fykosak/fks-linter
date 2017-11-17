@@ -69,4 +69,27 @@ class TrailingWhitespace:
         if text[-1].isspace():
             self.linter.l(event.context, "Trailing whitespace.")
         
+class ForbiddenMacros:
+    # accepts a list of pairs (forbidden macro, replacement)
+    def __init__(self, linter, parser, macros):
+        self.linter = linter
+        self.macros = macros
+
+        parser.register(Event.Macro, self.macro)
+
+    def match(self, pattern, text):
+        for p in range(3):
+            if text[p] is None:
+                return (pattern[p] is None)
+            elif pattern[p] and pattern[p].fullmatch(text[p]) == None:
+                return False
+        return True
+
+    def macro(self, event):
+        for macro in self.macros:
+            if self.match(macro[0], event.args):
+                self.linter.l(event.context, \
+                  "Forbidden macro {}, use {} instead.".format( \
+                  event.to_string(macro[0]), macro[1]))
+
 

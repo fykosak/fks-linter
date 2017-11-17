@@ -21,6 +21,20 @@ class Event:
         self.context = context
         self.args = args
 
+    def to_string(self, args):
+        if self.name != Event.Macro:
+            return
+        ret = "\\"
+        if args[0]:
+            ret += self.args[0]
+        if self.args[2] and args[2]:
+            ret += "[" + self.args[2] + "]"
+        if self.args[1] and args[1]:
+            if self.args[1][0].isalpha():
+                ret += " "
+            ret += self.args[1]
+        return ret
+
 class Linter:
     # l for line (there should be also c function)
     def l(self, context, message):
@@ -111,7 +125,22 @@ class Parser:
             return self.STATE_SEQ
         else:
             macro = line[self.macro:self.context.colidx]
-            self._raise(Event.Macro, macro)
+            nxt_chr = None
+            nxt_colidx = self.context.colidx
+            while nxt_colidx != len(line) and line[nxt_colidx].isspace():
+                nxt_colidx += 1
+            opt_arg = None
+            if nxt_colidx != len(line) and line[nxt_colidx] == '[' and macro != 'left':
+                opt_start = nxt_colidx + 1
+                while line[nxt_colidx] != ']':
+                    nxt_colidx += 1
+                opt_arg = line[opt_start:nxt_colidx]
+                nxt_colidx += 1
+            while nxt_colidx != len(line) and line[nxt_colidx].isspace():
+                nxt_colidx += 1
+            if nxt_colidx != len(line):
+                nxt_chr = line[nxt_colidx]
+            self._raise(Event.Macro, macro, nxt_chr, opt_arg)
             self.state = self.STATE_TEXT
             return self._st_text(line, c)
 
