@@ -130,7 +130,7 @@ class Parser:
             while nxt_colidx != len(line) and line[nxt_colidx].isspace():
                 nxt_colidx += 1
             opt_arg = None
-            if nxt_colidx != len(line) and line[nxt_colidx] == '[':
+            if nxt_colidx != len(line) and line[nxt_colidx] == '[' and macro != 'left':
                 opt_start = nxt_colidx + 1
                 while line[nxt_colidx] != ']':
                     nxt_colidx += 1
